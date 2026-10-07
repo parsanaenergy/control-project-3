@@ -1,0 +1,10 @@
+import fs from 'node:fs/promises';
+const input=process.argv[2]??new URL('../source/raw-sheets.json',import.meta.url);
+const sheets=JSON.parse(await fs.readFile(input,'utf8'));
+const str=v=>v==null?'':String(v).trim();
+const orders=sheets[0].values.slice(1).flatMap((r,i)=>str(r[3])?[{id:`order-${i+2}`,row:i+2,orderDate:str(r[0]),project:str(r[1]).toLowerCase(),due:str(r[2]),name:str(r[3]),quantity:r[4]??null,color:str(r[5]),light:str(r[6]),delivery:str(r[7]),note:str(r[8]),planningNote:str(r[9])}]:[]);
+const parts=sheets[1].values.slice(1).flatMap((r,i)=>str(r[2])?[{id:`part-${i+2}`,row:i+2,date:str(r[0]),group:str(r[1]),name:str(r[2]),perUnit:str(r[3]),total:str(r[4]),stock:r[6]??null,requested:r[7]??null,lineDate:str(r[8]),project:str(r[9]).toLowerCase(),product:str(r[10])}]:[]);
+const laser=sheets[2].values.slice(2).flatMap((r,i)=>str(r[2])?[{id:`laser-${i+3}`,row:i+3,project:str(r[0]).toLowerCase(),product:str(r[1]),name:str(r[2]),quantity:r[3]??null,thickness:r[4]??null,dimensions:str(r[5]),sheets:r[6]??null,material:str(r[7]),status:str(r[8]),doneDate:str(r[9])}]:[]);
+const data={schema:1,source:'سفارشات 1405.xlsx',importedAt:'2026-10-07',orders,parts,laser};
+await fs.writeFile(new URL('../public/dashboard/data.json',import.meta.url),JSON.stringify(data));
+console.log(JSON.stringify({orders:orders.length,parts:parts.length,laser:laser.length}));

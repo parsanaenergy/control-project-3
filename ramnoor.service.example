@@ -1,0 +1,16 @@
+[Unit]
+Description=Ram Noor factory dashboard
+After=network.target
+
+[Service]
+Type=simple
+User=ramnoor
+WorkingDirectory=/opt/ramnoor-dashboard
+EnvironmentFile=/etc/ramnoor-dashboard.env
+ExecStart=/usr/bin/node /opt/ramnoor-dashboard/server.mjs
+Restart=on-failure
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.sites-runtime/
+.wrangler/
+.vinext/
+var/
+.env*
+!.env.example
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+.next/
